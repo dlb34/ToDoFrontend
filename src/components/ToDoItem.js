@@ -9,7 +9,7 @@ const ToDoItem = ({ todo, refreshToDos }) => {
     };
 
     const handleCheckboxChange = async () => {
-        // Sending a POST request to update the 'done' status
+        // Sending a POST request to toggle the 'done' status
         await axios.post(`http://localhost:8080/toDo/${todo.id}`);
         refreshToDos(); // Refresh the list after updating
     };
@@ -25,10 +25,10 @@ const ToDoItem = ({ todo, refreshToDos }) => {
                 border: '1px solid #ccc' // Optional: Add a border for better visibility
             }}
         >
-            <h3 style={{ margin: 0 }}> {/* Remove margin to eliminate extra space */}
+            <h3 style={{ margin: 0 }}>
                 {todo.title}
             </h3>
-            <p style={{ margin: 0 }}> {/* Remove margin to eliminate extra space */}
+            <p style={{ margin: 0 }}>
                 {todo.description}
             </p>
             <input
