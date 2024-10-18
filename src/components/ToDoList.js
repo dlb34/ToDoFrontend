@@ -6,9 +6,21 @@ import ToDoItem from './ToDoItem';
 const ToDoList = () => {
     const [todos, setTodos] = useState([]);
 
+    // Fetch the list of to-dos from the backend
     const fetchToDos = async () => {
-        const response = await axios.get('http://localhost:8080/toDo');
-        setTodos(response.data);
+        try {
+            const response = await axios.get('http://localhost:8080/toDo');
+            console.log("Fetched ToDos: ", response.data); // Log the fetched todos
+
+            // Sort todos: Completed ones should move to the bottom
+            const sortedTodos = response.data.sort((a, b) => {
+                return (a.done === b.done) ? 0 : a.done ? 1 : -1; // Sorting logic
+            });
+
+            setTodos(sortedTodos);
+        } catch (error) {
+            console.error("Error fetching to-dos: ", error);
+        }
     };
 
     useEffect(() => {
@@ -17,14 +29,9 @@ const ToDoList = () => {
 
     return (
         <div className="todo-list">
-            <h2>Your To-Do List</h2>
-            {todos.length === 0 ? (
-                <p>No to-dos available. Add some!</p>
-            ) : (
-                todos.map((todo) => (
-                    <ToDoItem key={todo.id} todo={todo} refreshToDos={fetchToDos} />
-                ))
-            )}
+            {todos.map(todo => (
+                <ToDoItem key={todo.id} todo={todo} refreshToDos={fetchToDos} />
+            ))}
         </div>
     );
 };
